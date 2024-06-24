@@ -75,14 +75,3 @@ const gmailHandler = async (req, res) => {
 };
 
 module.exports = { gmailHandler };
-
-/**
- * Starts the polling process for the Gmail handler every 3 sec.
- *
- * @function startPolling
- */
-
-const startPolling = () => {
-  setInterval(gmailHandler, 3000);
-};
-module.exports = { startPolling };
