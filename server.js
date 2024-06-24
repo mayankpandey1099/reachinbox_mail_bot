@@ -1,13 +1,15 @@
-require("dotenv").config();
-
 const express = require("express");
+require("dotenv").config();
 const session = require("express-session");
 const cors = require("cors");
+const { sequelize } = require("./utils/db");
+const { googleRouter } = require("./routes/googleRouter");
+const { outlookRouter } = require("./routes/outlookRouter");
+const passport = require("./middleware/passport");
 
 const app = express();
-
-
 app.use(cors());
+
 app.use(
   session({
     secret: "session",
@@ -19,11 +21,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/auth", googleRouter);
+app.use("/", outlookRouter);
 
+const port = 3000;
 
-
-const port = process.env.PORT || 3000;
-
-app.listen(port, ()=>{
-    console.log(`server is listening on port ${port}`);
+sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log("Server is runnig ...");
+  });
 });
